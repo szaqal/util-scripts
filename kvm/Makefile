@@ -4,8 +4,6 @@ SHELL=/bin/bash
 BRIDGE_IFACE_NAME=br0
 VM_PATH=/opt/vboxes
 
-QEMU_URL=qemu+ssh://malczyk@dell.home.wickedsoftware.pl/system
-ISO_URL=http://dell.home.wickedsoftware.pl/software
 
 
 
@@ -27,7 +25,9 @@ vm-create-ubuntu:
 		--network bridge=$(BRIDGE_IFACE_NAME) \
 		--cdrom $(VM_IMAGE_LOCATION) \
 		--disk path=$(VM_PATH)/$(VM_NAME).img,size=$(VM_DISK) \
-		--graphics vnc --os-type linux --os-variant $(VM_OS_VARIANT)
+		--graphics vnc \
+		--os-type linux \
+		--os-variant $(VM_OS_VARIANT)
 
 
 vm-create-centos7: export VM_OS_VARIANT=rhel7
@@ -36,7 +36,17 @@ vm-create-centos7: export VM_RAM=4096
 vm-create-centos7: export VM_DISK=10
 vm-create-centos7: export VM_IMAGE_LOCATION=$(ISO_URL)/CentOS-7-x86_64-Minimal-1611.iso
 vm-create-centos7: 
-	@virt-install --connect=$(QEMU_URL) --virt-type kvm --name $(VM_NAME) --ram $(VM_RAM) --vcpus $(VM_CPUS) --network bridge=$(BRIDGE_IFACE_NAME) --cdrom $(VM_IMAGE_LOCATION) --disk path=$(VM_PATH)/$(VM_NAME).img,size=$(VM_DISK) --graphics vnc --os-type linux --os-variant $(VM_OS_VARIANT)
+	@virt-install --connect=$(QEMU_URL) \
+		--virt-type kvm \
+		--name $(VM_NAME) \
+		--ram $(VM_RAM) \
+		--vcpus $(VM_CPUS) \
+		--network bridge=$(BRIDGE_IFACE_NAME) \
+		--cdrom $(VM_IMAGE_LOCATION) \
+		--disk path=$(VM_PATH)/$(VM_NAME).img,size=$(VM_DISK) \
+		--graphics vnc \
+		--os-type linux \
+		--os-variant $(VM_OS_VARIANT)
 
 
 vm-clone:
@@ -49,4 +59,12 @@ vm-snapshot:
 
 ifndef VM_NAME
 $(error VM_NAME is required)
+endif
+
+ifndef QEMU_URL
+$(error QEMU_URL is required)
+endif
+
+ifndef ISO_URL
+$(error ISO_URL is required)
 endif
