@@ -9,8 +9,6 @@
         "headless": "false",
         "ssh_username": "root",
         "ssh_password": "abc123"
-
-        
     },
     "builders": [
         {
@@ -28,7 +26,7 @@
             "iso_checksum": "{{user `iso_checksum`}}",
             "boot_wait": "10s",
             "headless": "{{user `headless`}}",
-            "output_directory": "output_centos_tdhtest",
+            "output_directory": "image_ubuntu_18",
             "http_directory": ".",
             "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S shutdown -P now",
             "boot_command": [
