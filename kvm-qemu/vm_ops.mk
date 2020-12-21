@@ -5,8 +5,6 @@ BRIDGE_IFACE_NAME=br0
 VM_PATH=/opt/vboxes
 
 
-
-
 vm-view: 
 	@virt-viewer --connect=$(QEMU_URL)
 
