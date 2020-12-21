@@ -1,3 +1,7 @@
-test-squid: export http_proxy=http://peja.home.wickedsoftware.pl:3128/
+test-squid: export http_proxy=$(PROXY_HOST)
 test-squid:
-	wget http://peja.home.wickedsoftware.pl/iso/CentOS-6.6-x86_64-minimal.iso
+	wget http://centos.wielun.net/8.3.2011/isos/x86_64/CentOS-8.3.2011-x86_64-boot.iso
+
+ifndef PROXY_HOST
+$(error PROXY_HOST is required)
+endif
