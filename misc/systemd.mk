@@ -16,3 +16,16 @@ is-enabled:
 
 show:
 	systemctl show
+
+journal-out-json:
+	journalctl -o json
+
+
+#-S, --since=, -U, --until=
+journal-unit: name=docker
+journal-unit:
+	journalctl -u $(name)
+
+#--vacuum-size=, --vacuum-time=, --vacuum-files=
+journal-disk-usage:
+	journalctl --disk-usage
