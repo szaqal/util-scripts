@@ -20,6 +20,21 @@ member-list:
 status:
 	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 endpoint status -w table
 
+keys:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 get --prefix f
+
+perf:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 check perf
+
+datascale:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 check datascale
+
+
+put: KEY=foo
+put: VAL=bar
+put:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 put $(KEY) $(VAL)
+
 
 instance-%: DATA_DIR=/tmp/etcd
 instance-run-%: export ETCD_INITIAL_CLUSTER=node1=http://$(IP_ADDR):2381,node2=http://$(IP_ADDR):2382,node3=http://$(IP_ADDR):2383
