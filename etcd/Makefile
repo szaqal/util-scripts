@@ -1,7 +1,7 @@
 #https://github.com/etcd-io/etcd/releases/
 
 DOWNLOAD_DIR=/tmp/etcd-download-test
-CERT_PATH=/tmp/cert
+CERT_PATH=certs
 
 IP_ADDR=192.168.1.155
 
@@ -48,9 +48,9 @@ instance-run-%: export ETCD_WAL_DIR=$(DATA_DIR)-$(INSTANCE)/wal
 instance-run-%: export ETCD_LISTEN_CLIENT_URLS=http://$(IP_ADDR):237$(INSTANCE)
 instance-run-%: export ETCD_ADVERTISE_CLIENT_URLS=$(ETCD_LISTEN_CLIENT_URLS)
 
-instance-run-%: export ETCD_PEER_TRUSTED_CA_FILE=$(CERT_PATH)/rootCA.crt
-instance-run-%: export ETCD_PEER_CERT_FILE=$(CERT_PATH)/client.crt
-instance-run-%: export ETCD_PEER_KEY_FILE=$(CERT_PATH)/client.key
+instance-run-%: export ETCD_PEER_TRUSTED_CA_FILE=$(CERT_PATH)/ca.pem
+instance-run-%: export ETCD_PEER_CERT_FILE=$(CERT_PATH)/node.pem
+instance-run-%: export ETCD_PEER_KEY_FILE=$(CERT_PATH)/node-key.pem
 instance-run-%: export ETCD_LISTEN_PEER_URLS=https://$(IP_ADDR):238$(INSTANCE)
 instance-run-%: export ETCD_INITIAL_ADVERTISE_PEER_URLS=https://$(IP_ADDR):238$(INSTANCE)
 	
@@ -58,6 +58,7 @@ instance-run-%: export ETCD_INITIAL_ADVERTISE_PEER_URLS=https://$(IP_ADDR):238$(
 clean: DATA_DIR=/tmp/etcd
 clean:
 	rm -frv  $(DATA_DIR)-?
+	rm -frv  ./certs
 
 
 
@@ -72,10 +73,27 @@ instance-run-2: INSTANCE=2
 instance-run-2:
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/data
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/wal
-	$(DOWNLOAD_DIR)/etcd -debug
+	$(DOWNLOAD_DIR)/etcd -debug 
 
 instance-run-3: INSTANCE=3
 instance-run-3:
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/data
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/wal
 	$(DOWNLOAD_DIR)/etcd -debug
+
+ 
+#apt install golang-cfssl
+ca:
+	mkdir certs
+	cfssl gencert -initca ca-csr.json | cfssljson -bare certs/ca
+	openssl verify -purpose crlsign -CAfile certs/ca.pem certs/ca.pem
+
+ca-show:
+	openssl x509 -in certs/ca.pem -text -noout
+
+
+req:
+	cfssl gencert -ca certs/ca.pem  -ca-key certs/ca-key.pem -config ca-config.json  ca-csr.json | cfssljson -bare certs/node
+
+req-show:
+	openssl x509 -in certs/node.pem -text -noout
