@@ -26,4 +26,9 @@ gen-client:
 	@openssl x509 -req -in $(CSR_FILE) -CA $(ROOT_CERT) -CAkey $(ROOT_KEY) -CAcreateserial -out $(CRT_FILE) -days 500 -sha256
 
 
+show-root:
+	@openssl x509 -in $(ROOT_CERT) -text -noout
+
+show-client:
+	@openssl x509 -in $(ROOT_CERT) -text -noout
 

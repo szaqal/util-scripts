@@ -1,6 +1,8 @@
 #https://github.com/etcd-io/etcd/releases/
 
 DOWNLOAD_DIR=/tmp/etcd-download-test
+CERT_PATH=/tmp/cert
+
 IP_ADDR=192.168.1.155
 
 download: GOOGLE_URL=https://storage.googleapis.com/etcd
@@ -37,16 +39,21 @@ put:
 
 
 instance-%: DATA_DIR=/tmp/etcd
-instance-run-%: export ETCD_INITIAL_CLUSTER=node1=http://$(IP_ADDR):2381,node2=http://$(IP_ADDR):2382,node3=http://$(IP_ADDR):2383
+instance-run-%: export ETCD_INITIAL_CLUSTER=node1=https://$(IP_ADDR):2381,node2=https://$(IP_ADDR):2382,node3=https://$(IP_ADDR):2383
 instance-run-%: export ETCD_NAME=node$(INSTANCE)
 instance-run-%: export ETCD_INITIAL_CLUSTER_STATE=new
 instance-run-%: export ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster-1
-instance-run-%: export ETCD_INITIAL_ADVERTISE_PEER_URLS=http://$(IP_ADDR):238$(INSTANCE)
-instance-run-%: export ETCD_LISTEN_PEER_URLS=http://$(IP_ADDR):238$(INSTANCE)
 instance-run-%: export ETCD_DATA_DIR=$(DATA_DIR)-$(INSTANCE)/data 
 instance-run-%: export ETCD_WAL_DIR=$(DATA_DIR)-$(INSTANCE)/wal
 instance-run-%: export ETCD_LISTEN_CLIENT_URLS=http://$(IP_ADDR):237$(INSTANCE)
 instance-run-%: export ETCD_ADVERTISE_CLIENT_URLS=$(ETCD_LISTEN_CLIENT_URLS)
+
+instance-run-%: export ETCD_PEER_TRUSTED_CA_FILE=$(CERT_PATH)/rootCA.crt
+instance-run-%: export ETCD_PEER_CERT_FILE=$(CERT_PATH)/client.crt
+instance-run-%: export ETCD_PEER_KEY_FILE=$(CERT_PATH)/client.key
+instance-run-%: export ETCD_LISTEN_PEER_URLS=https://$(IP_ADDR):238$(INSTANCE)
+instance-run-%: export ETCD_INITIAL_ADVERTISE_PEER_URLS=https://$(IP_ADDR):238$(INSTANCE)
+	
 
 clean: DATA_DIR=/tmp/etcd
 clean:
