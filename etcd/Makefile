@@ -66,34 +66,34 @@ instance-run-1: INSTANCE=1
 instance-run-1:
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/data
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/wal
-	$(DOWNLOAD_DIR)/etcd -debug
+	$(DOWNLOAD_DIR)/etcd
 
 
 instance-run-2: INSTANCE=2
 instance-run-2:
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/data
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/wal
-	$(DOWNLOAD_DIR)/etcd -debug 
+	$(DOWNLOAD_DIR)/etcd
 
 instance-run-3: INSTANCE=3
 instance-run-3:
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/data
 	mkdir -p $(DATA_DIR)-$(INSTANCE)/wal
-	$(DOWNLOAD_DIR)/etcd -debug
+	$(DOWNLOAD_DIR)/etcd
 
  
 #apt install golang-cfssl
 ca:
 	mkdir certs
-	cfssl gencert -initca ca-csr.json | cfssljson -bare certs/ca
-	openssl verify -purpose crlsign -CAfile certs/ca.pem certs/ca.pem
+	cfssl gencert -initca ca-csr.json | cfssljson -bare $(CERT_PATH)/ca
+	openssl verify -purpose crlsign -CAfile certs/ca.pem $(CERT_PATH)/ca.pem
 
 ca-show:
-	openssl x509 -in certs/ca.pem -text -noout
+	openssl x509 -in $(CERT_PATH)/ca.pem -text -noout
 
 
 req:
-	cfssl gencert -ca certs/ca.pem  -ca-key certs/ca-key.pem -config ca-config.json  ca-csr.json | cfssljson -bare certs/node
+	cfssl gencert -ca $(CERT_PATH)/ca.pem  -ca-key certs/ca-key.pem -config ca-config.json  ca-csr.json | cfssljson -bare $(CERT_PATH)/node
 
 req-show:
-	openssl x509 -in certs/node.pem -text -noout
+	openssl x509 -in $(CERT_PATH)/node.pem -text -noout
