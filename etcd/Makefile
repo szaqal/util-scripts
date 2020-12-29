@@ -17,45 +17,55 @@ download:
 	rm -f /tmp/etcd-$(ETCD_VER)-linux-amd64.tar.gz
 
 ctl-member-list:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		member list -w table
 
 ctl-status:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		endpoint status -w table
 
 keys:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		get --prefix f
 
 ctl-perf:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		check perf
 
 ctl-datascale:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		check datascale
 
+ctl-cluster-health:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		endpoint --cluster health
 
 put: KEY=foo
 put: VAL=bar
 put:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 put $(KEY) $(VAL)
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		put $(KEY) $(VAL)
 
 
 clean: DATA_DIR=/tmp/etcd
