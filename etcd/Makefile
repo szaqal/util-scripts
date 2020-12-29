@@ -16,24 +16,40 @@ download:
 	tar xzvf /tmp/etcd-$(ETCD_VER)-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1
 	rm -f /tmp/etcd-$(ETCD_VER)-linux-amd64.tar.gz
 
-member-list:
+ctl-member-list:
 	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
 		member list -w table
 
-status:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 endpoint status -w table
+ctl-status:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		endpoint status -w table
 
 keys:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 get --prefix f
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		get --prefix f
 
-perf:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 check perf
+ctl-perf:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		check perf
 
-datascale:
-	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 check datascale
+ctl-datascale:
+	@$(DOWNLOAD_DIR)/etcdctl --endpoints=[https://$(IP_ADDR):2371,https://$(IP_ADDR):2372,https://$(IP_ADDR):2373] \
+		--cacert=$(CERT_PATH)/ca.pem \
+		--cert=$(CERT_PATH)/node.pem \
+		--key=$(CERT_PATH)/node-key.pem \
+		check datascale
 
 
 put: KEY=foo
