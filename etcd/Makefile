@@ -44,11 +44,13 @@ ctl-perf:
 		--key=$(CERT_PATH)/node-key.pem \
 		check perf
 
+# Doesn't seem to work with TLS
 ctl-datascale:
 	@$(DOWNLOAD_DIR)/etcdctl --endpoints=$(IP_ADDR):2371,$(IP_ADDR):2372,$(IP_ADDR):2373 \
 		--cacert=$(CERT_PATH)/ca.pem \
 		--cert=$(CERT_PATH)/node.pem \
 		--key=$(CERT_PATH)/node-key.pem \
+		--insecure-transport=true \
 		check datascale
 
 ctl-cluster-health:
