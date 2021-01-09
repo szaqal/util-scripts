@@ -14,6 +14,10 @@ is-enabled: name=docker
 is-enabled:
 	systemctl is-enabled $(name)
 
+show-props: name=docker
+show-props:
+	sudo systemctl show --property=Environment $(name)
+
 show:
 	systemctl show
 
@@ -29,3 +33,4 @@ journal-unit:
 #--vacuum-size=, --vacuum-time=, --vacuum-files=
 journal-disk-usage:
 	journalctl --disk-usage
+
