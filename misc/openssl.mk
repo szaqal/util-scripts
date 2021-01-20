@@ -1,9 +1,9 @@
-CERT_PATH=/tmp/cert
+CERT_PATH=?/tmp
 ROOT_KEY=$(CERT_PATH)/rootCA.key
 ROOT_CERT=$(CERT_PATH)/rootCA.crt
 ROOT_VALIDITY=1024
-ROOT_SUBJECT="/C=PL/ST=MA/O=Dummy Inc./CN=dummy.com"
-CLNT_SUBJECT="/C=US/ST=CA/O=MyOrg, Inc./CN=client.com"
+ROOT_SUBJECT?="/C=PL/ST=MA/O=Dummy Inc./CN=dummy.com"
+CLNT_SUBJECT?="/C=US/ST=CA/O=MyOrg, Inc./CN=client.com"
 
 clean:
 	@rm -frv $(CERT_PATH)
@@ -29,6 +29,7 @@ gen-client:
 show-root:
 	@openssl x509 -in $(ROOT_CERT) -text -noout
 
+show-client: CRT_FILE=$(CERT_PATH)/client.crt
 show-client:
-	@openssl x509 -in $(ROOT_CERT) -text -noout
+	@openssl x509 -in $(CRT_FILE) -text -noout
 
