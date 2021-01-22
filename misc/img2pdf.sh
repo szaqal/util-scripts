@@ -17,6 +17,7 @@ if which convert >/dev/null; then
 	-exec \
 	convert {} \
 	-fuzz ${FUZZ_FACTOR} \
+	-monochrome \
 	-layers Optimize {}.pdf \;
 else
     echo convert does not exist
