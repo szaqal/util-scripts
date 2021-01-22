@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# 
+# Converts images to PDF file i merges into single PDF document
+#
+# usage ./img2pdf.sh ~/Desktop/
+#
+
+
 #set -x
 
 FUZZ_FACTOR=${CONV_FUZZ:-10%}
