@@ -32,3 +32,5 @@ show-root:
 show-client:
 	@openssl x509 -in $(ROOT_CERT) -text -noout
 
+hash-sha256:
+	@openssl dgst -sha256 /etc/passwd
