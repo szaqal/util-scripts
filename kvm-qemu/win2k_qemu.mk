@@ -17,13 +17,11 @@ win2k-boot:
 		-cpu pentium \
 		-vga cirrus
 
-win2k-start: DISK_CD=~/Pobrane/EN_WIN2000_PRO_SP4.ISO
 win2k-start:
 	qemu-system-i386  -hda $(DISK_PATH) \
 		-boot a \
-		-cdrom $(DISK_CD) \
-		-vga cirrus \
 		-enable-kvm \
+		-vga cirrus \
 		-cpu host \
-		-soundhw sb16 \
-		-m 1024 
+		-soundhw ac97 \
+		-m 1024
