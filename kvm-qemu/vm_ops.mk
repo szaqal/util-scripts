@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 
 BRIDGE_IFACE_NAME=br0
-VM_PATH=/opt/vboxes
+VM_PATH=/data/disk1/vmachines
 
 
 vm-view: 
@@ -40,6 +40,23 @@ vm-create-centos7:
 		--ram $(VM_RAM) \
 		--vcpus $(VM_CPUS) \
 		--network bridge=$(BRIDGE_IFACE_NAME) \
+		--cdrom $(VM_IMAGE_LOCATION) \
+		--disk path=$(VM_PATH)/$(VM_NAME).img,size=$(VM_DISK) \
+		--graphics vnc \
+		--os-type linux \
+		--os-variant $(VM_OS_VARIANT)
+
+vm-create-rhel8: export VM_OS_VARIANT=rhel7
+vm-create-rhel8: export VM_CPUS=2
+vm-create-rhel8: export VM_RAM=4096
+vm-create-rhel8: export VM_DISK=50
+vm-create-rhel8: export VM_IMAGE_LOCATION=$(ISO_URL)/rhel-8.3-x86_64-dvd.iso
+vm-create-rhel8: 
+	@virt-install --connect=$(QEMU_URL) \
+		--virt-type kvm \
+		--name $(VM_NAME) \
+		--ram $(VM_RAM) \
+		--vcpus $(VM_CPUS) \
 		--cdrom $(VM_IMAGE_LOCATION) \
 		--disk path=$(VM_PATH)/$(VM_NAME).img,size=$(VM_DISK) \
 		--graphics vnc \
